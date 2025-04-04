@@ -77,6 +77,10 @@ enum Which {
     SmolLM2_1BInstruct,
     #[value(name = "deepseekr1-llama8b")]
     DeepseekR1Llama8b,
+    #[value(name = "llama2-7b")]
+    L27B,
+    #[value(name = "llama2-13b")]
+    L213B
 }
 
 impl Which {
@@ -97,7 +101,9 @@ impl Which {
             | Self::Phi3
             | Self::SmolLM2_1BInstruct
             | Self::SmolLM2_360MInstruct
-            | Self::DeepseekR1Llama8b => false,
+            | Self::DeepseekR1Llama8b
+            | Self::L27B 
+            | Self::L213B => false,
             // Zephyr and OpenChat are fine tuned versions of mistral and should be treated in the
             // same way. Starling is a fine tuned version of OpenChat.
             Self::OpenChat35
@@ -136,7 +142,9 @@ impl Which {
             | Self::SmolLM2_1BInstruct
             | Self::SmolLM2_360MInstruct
             | Self::Phi3
-            | Self::DeepseekR1Llama8b => false,
+            | Self::DeepseekR1Llama8b
+            | Self::L27B
+            | Self::L213B => false,
             Self::Zephyr7bAlpha | Self::Zephyr7bBeta => true,
         }
     }
@@ -165,7 +173,9 @@ impl Which {
             | Self::SmolLM2_1BInstruct
             | Self::SmolLM2_360MInstruct
             | Self::Phi3
-            | Self::DeepseekR1Llama8b => false,
+            | Self::DeepseekR1Llama8b 
+            | Self::L27B 
+            | Self::L213B => false,
             Self::OpenChat35 | Self::Starling7bAlpha => true,
         }
     }
@@ -195,7 +205,9 @@ impl Which {
             | Self::SmolLM2_360MInstruct
             | Self::Phi3
             | Self::OpenChat35
-            | Self::Starling7bAlpha => false,
+            | Self::Starling7bAlpha 
+            | Self::L27B
+            | Self::L213B => false,
             Self::DeepseekR1Llama8b => true,
         }
     }
@@ -226,6 +238,8 @@ impl Which {
             Self::SmolLM2_360MInstruct => "HuggingFaceTB/SmolLM2-360M-Instruct",
             Self::SmolLM2_1BInstruct => "HuggingFaceTB/SmolLM2-1.7B-Instruct",
             Self::DeepseekR1Llama8b => "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+            Self::L27B => "meta-llama/Llama-2-7b-hf",
+            Self::L213B => "meta-llama/Llama-2-13b-hf",
         }
     }
 }
@@ -402,6 +416,14 @@ impl Args {
                         "unsloth/DeepSeek-R1-Distill-Llama-8B-GGUF",
                         "DeepSeek-R1-Distill-Llama-8B-Q4_K_M.gguf",
                     ),
+                    Which::L27B => (
+                        "TheBloke/Llama-2-7B-GGUF", 
+                        "llama-2-7b.Q4_K_M.gguf"
+                    ),
+                    Which::L213B => (
+                        "KoboldAI/LLaMA2-13B-Psyfighter2-GGUF", 
+                        "LLaMA2-13B-Psyfighter2.Q4_K_M.gguf"
+                    )
                 };
                 let revision = if self.which == Which::Phi3 {
                     "5eef2ce24766d31909c0b269fe90c817a8f263fb"
@@ -517,7 +539,9 @@ fn main() -> anyhow::Result<()> {
                 | Which::SmolLM2_1BInstruct
                 | Which::SmolLM2_360MInstruct
                 | Which::DeepseekR1Llama8b
-                | Which::Phi3 => 1,
+                | Which::Phi3
+                | Which::L27B 
+                | Which::L213B => 1,
                 Which::Mixtral
                 | Which::MixtralInstruct
                 | Which::Mistral7b
