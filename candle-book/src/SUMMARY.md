@@ -4,29 +4,16 @@
 
 # User Guide
 
-- [Installation](guide/installation.md)
-- [Tutorial - MNIST](guide/mnist/intro.md)
-  - [Modeling](guide/mnist/modeling.md)
-  - [Training](guide/mnist/training.md)
-  - [Saving And Loading](guide/mnist/saving_loading.md)
-- [PyTorch cheatsheet](guide/cheatsheet.md)
+- [Installation](user-guide/installation.md)
+- [Tutorial - MNIST](user-guide/mnist/intro.md)
+  - [Modeling](user-guide/mnist/modeling.md)
+  - [Training](user-guide/mnist/training.md)
+  - [Saving And Loading](user-guide/mnist/saving_loading.md)
 
-# Reference Guide
+# Contributor Guide
 
-- [Running a model](inference/inference.md)
-    - [Using the hub](inference/hub.md)
-- [Error management](error_manage.md)
-- [Tracing](tracing.md)
-- [Training](training/training.md)
-    - [Simplified](training/simplified.md)
-    - [MNIST](training/mnist.md)
-    - [Fine-tuning]()
-    - [Serialization]()
-- [Advanced Cuda usage]()
-    - [Writing a custom kernel]()
-    - [Porting a custom kernel]()
-- [Using MKL]()
-- [Creating apps]()
-    - [Creating a WASM app]()
-    - [Creating a REST api webserver]()
-    - [Creating a desktop Tauri app]()
+- [Core](contributor-guide/core/intro.md)
+  - [Tensors](contributor-guide/core/tensors.md)
+  - [Storage](contributor-guide/core/storage.md)
+
+# Reference
