@@ -13,7 +13,8 @@
 # Contributor Guide
 
 - [Core](contributor-guide/core/intro.md)
-  - [Tensors](contributor-guide/core/tensors.md)
-  - [Storage](contributor-guide/core/storage.md)
+  - [Tensors](contributor-guide/core/tensors/tensors.md)
+    - [Layout](contributor-guide/core/tensors/layout.md)
+    - [Storage](contributor-guide/core/tensors/storage.md)
 
 # Reference

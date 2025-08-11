@@ -1,22 +1,4 @@
-# Tensors
-
-In candle a [`Tensor`](https://github.com/huggingface/candle/blob/main/candle-core/src/tensor.rs#L68) is a `Arc` wrapped `Tensor_`.
-
-```rust
-{{#include ../../../../candle-core/src/tensor.rs:68}}
-```
-
-And a [`Tensor_`](https://github.com/huggingface/candle/blob/main/candle-core/src/tensor.rs#L23) is a struct that contains
-
-```rust
-{{#include ../../../../candle-core/src/tensor.rs:23:24}}
-{{#include ../../../../candle-core/src/tensor.rs:37:43}}
-```
-
-This is a lot, but at it's core the tensor implementation really boils down to 2
-main fields: `layout` and `storage`.
-
-## Layout
+# Tensor Layout
 
 We'll go more into detail in the storage section, but you can think of the
 data in a tensor as linear memory, basically a `Vec` of the element type.
@@ -24,8 +6,8 @@ data in a tensor as linear memory, basically a `Vec` of the element type.
 The [`Layout`](https://github.com/huggingface/candle/blob/main/candle-core/src/layout.rs#L5) struct describes how that linear memory should be interpreted as a tensor.
 
 ```rust
-{{#include ../../../../candle-core/src/layout.rs:5:6}}
-{{#include ../../../../candle-core/src/layout.rs:8:10}}
+{{#include ../../../../../candle-core/src/layout.rs:5:6}}
+{{#include ../../../../../candle-core/src/layout.rs:8:10}}
 ```
 
 It has 3 fields, `shape`, `stride`, and `offset`.
@@ -37,7 +19,7 @@ This is the concept most people are familar with when they think about a tensor.
 [`Shape`](https://github.com/huggingface/candle/blob/main/candle-core/src/shape.rs#L6)
 
 ```rust
-{{#include ../../../../candle-core/src/shape.rs:6}}
+{{#include ../../../../../candle-core/src/shape.rs:6}}
 ```
 
 It is just a list of numbers that has length of the number of dimensions in a tensor.
@@ -103,6 +85,3 @@ This turns out to be true. Here's a quick proof outline for two dimensions:
 `ravel_index(a + b) = ravel_index(a) + ravel_index(b)`
 
 The proof for higher dimensions follows the same pattern and is left as an exercise for the reader.
-
-## Storage
-
