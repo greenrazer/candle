@@ -1,9 +1,9 @@
-# Candle Transformers Tutorial
+# Candle Transformers Llama Tutorial
 
 ## Introduction
 
 This tutorial provides an introduction to loading and use hub-models by loading
-and running [SmolLM2-1.7B](https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B).
+and running [Llama-3.2-3B-Instruct](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct).
 
 ## Getting Started
 
