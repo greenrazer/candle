@@ -9,59 +9,7 @@ After training a model, it is useful to save and subsequently load the model par
 Let's modify our `training_loop` function to include functionality for saving weights:
 
 ```rust
-fn training_loop(
-    m: candle_datasets::vision::Dataset,
-) -> anyhow::Result<()> {
-    let dev = Device::cuda_if_available(0)?;
-
-    let train_labels = m.train_labels;
-    let train_images = m.train_images.to_device(&dev)?;
-    let train_labels = train_labels.to_dtype(DType::U32)?.to_device(&dev)?;
-
-    // Initialize a VarMap for trainable parameters
-    let varmap = VarMap::new();
-    let vs = VarBuilder::from_varmap(&varmap, DType::F32, &dev);
-    let model = Model::new(vs.clone())?;
-
-    let learning_rate = 0.05;
-    let epochs = 10;
-
-    // Initialize stochastic gradient descent optimizer
-    let mut sgd = candle_nn::SGD::new(varmap.all_vars(), learning_rate)?;
-    let test_images = m.test_images.to_device(&dev)?;
-    let test_labels = m.test_labels.to_dtype(DType::U32)?.to_device(&dev)?;
-    
-    for epoch in 1..epochs {
-        // Standard MNIST forward pass
-        let logits = model.forward(&train_images)?;
-        let log_sm = ops::log_softmax(&logits, D::Minus1)?;
-        
-        // Compute Negative Log Likelihood loss
-        let loss = loss::nll(&log_sm, &train_labels)?;
-
-        // Perform backward pass and update weights
-        sgd.backward_step(&loss)?;
-
-        // Evaluate model on test set
-        let test_logits = model.forward(&test_images)?;
-        let sum_ok = test_logits
-            .argmax(D::Minus1)?
-            .eq(&test_labels)?
-            .to_dtype(DType::F32)?
-            .sum_all()?
-            .to_scalar::<f32>()?;
-        let test_accuracy = sum_ok / test_labels.dims1()? as f32;
-        println!(
-            "{epoch:4} train loss: {:8.5} test acc: {:5.2}%",
-            loss.to_scalar::<f32>()?,
-            test_accuracy
-        );
-    }
-    
-    // Save model weights to disk
-    varmap.save("model_weights.safetensors")?;
-    Ok(())
-}
+{{#include code/mnist5.rs:51:103}}
 ```
 
 ```bash
@@ -83,62 +31,7 @@ $ cargo run --release
 Now that we have saved our model parameters, we can modify the code to load them. The primary change required is to make the `varmap` variable mutable:
 
 ```rust
-fn training_loop(
-    m: candle_datasets::vision::Dataset,
-) -> anyhow::Result<()> {
-    let dev = Device::cuda_if_available(0)?;
-
-    let train_labels = m.train_labels;
-    let train_images = m.train_images.to_device(&dev)?;
-    let train_labels = train_labels.to_dtype(DType::U32)?.to_device(&dev)?;
-
-    // Create a mutable VarMap for trainable parameters
-    let mut varmap = VarMap::new();
-    let vs = VarBuilder::from_varmap(&varmap, DType::F32, &dev);
-    let model = Model::new(vs.clone())?;
-
-    // Load pre-trained weights from file
-    varmap.load("model_weights.safetensors")?;
-
-    let learning_rate = 0.05;
-    let epochs = 10;
-
-    // Initialize stochastic gradient descent optimizer
-    let mut sgd = candle_nn::SGD::new(varmap.all_vars(), learning_rate)?;
-    let test_images = m.test_images.to_device(&dev)?;
-    let test_labels = m.test_labels.to_dtype(DType::U32)?.to_device(&dev)?;
-    
-    for epoch in 1..epochs {
-        // Standard MNIST forward pass
-        let logits = model.forward(&train_images)?;
-        let log_sm = ops::log_softmax(&logits, D::Minus1)?;
-        
-        // Compute Negative Log Likelihood loss
-        let loss = loss::nll(&log_sm, &train_labels)?;
-
-        // Perform backward pass and update weights
-        sgd.backward_step(&loss)?;
-
-        // Evaluate model on test set
-        let test_logits = model.forward(&test_images)?;
-        let sum_ok = test_logits
-            .argmax(D::Minus1)?
-            .eq(&test_labels)?
-            .to_dtype(DType::F32)?
-            .sum_all()?
-            .to_scalar::<f32>()?;
-        let test_accuracy = sum_ok / test_labels.dims1()? as f32;
-        println!(
-            "{epoch:4} train loss: {:8.5} test acc: {:5.2}%",
-            loss.to_scalar::<f32>()?,
-            test_accuracy
-        );
-    }
-    
-    // Save updated weights back to disk
-    varmap.save("model_weights.safetensors")?;
-    Ok(())
-}
+{{#include code/mnist6.rs:51:106}}
 ```
 
 ```bash
